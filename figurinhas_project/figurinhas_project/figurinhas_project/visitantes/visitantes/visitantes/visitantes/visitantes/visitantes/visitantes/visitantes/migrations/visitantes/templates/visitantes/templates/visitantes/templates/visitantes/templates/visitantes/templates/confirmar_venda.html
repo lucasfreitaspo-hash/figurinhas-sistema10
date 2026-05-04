@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Venda - Mister Wiz{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="confirmation-card success">
+        <h1>✅ Venda Registrada com Sucesso!</h1>
+        
+        <div class="sale-details">
+            <h3>Detalhes da Venda</h3>
+            
+            <div class="detail-row">
+                <span class="label">Cliente:</span>
+                <span class="value">{{ venda.visitante.nome }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Telefone:</span>
+                <span class="value">{{ venda.visitante.telefone }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Produto:</span>
+                <span class="value">{{ venda.produto.nome }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Quantidade:</span>
+                <span class="value">{{ venda.quantidade }}x</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Preço Unitário:</span>
+                <span class="value">R$ {{ venda.preco_unitario|floatformat:2 }}</span>
+            </div>
+            
+            <div class="detail-row highlight">
+                <span class="label"><strong>Total da Venda:</strong></span>
+                <span class="value"><strong class="big-price">R$ {{ venda.total|floatformat:2 }}</strong></span>
+            </div>
+        </div>
+
+        <form method="POST" class="button-group">
+            {% csrf_token %}
+            <button type="submit" name="acao" value="nova_venda" class="btn btn-primary btn-lg">
+                ➕ Registrar Nova Venda
+            </button>
+            <button type="submit" name="acao" value="registrar_saida" class="btn btn-success btn-lg">
+                🚪 Registrar Saída do Cliente
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
