@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Figurinhas - Mister Wiz{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo-section">
+                <span class="logo-text">🎴 Mister Wiz</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}" class="nav-link">Dashboard</a></li>
+                <li><a href="{% url 'registrar_entrada' %}" class="nav-link">Nova Venda</a></li>
+                <li><a href="{% url 'contatos' %}" class="nav-link">Contatos</a></li>
+                <li><a href="{% url 'relatorio' %}" class="nav-link">Relatórios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Mister Wiz - Sistema de Figurinhas. Todos os direitos reservados.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
