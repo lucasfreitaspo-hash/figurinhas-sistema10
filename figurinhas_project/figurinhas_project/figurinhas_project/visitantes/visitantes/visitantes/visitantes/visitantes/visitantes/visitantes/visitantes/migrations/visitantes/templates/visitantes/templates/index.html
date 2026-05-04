@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Mister Wiz{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>🎴 Bem-vindo ao Mister Wiz</h1>
+        <p class="subtitle">Gerencie suas vendas e contatos de figurinhas</p>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card stat-card-1">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">{{ total_visitantes }}</div>
+            <div class="stat-label">Total de Visitantes</div>
+        </div>
+        
+        <div class="stat-card stat-card-2">
+            <div class="stat-icon">📋</div>
+            <div class="stat-number">{{ entradas_hoje }}</div>
+            <div class="stat-label">Entradas Hoje</div>
+        </div>
+        
+        <div class="stat-card stat-card-3">
+            <div class="stat-icon">🛒</div>
+            <div class="stat-number">{{ compradores }}</div>
+            <div class="stat-label">Compradores</div>
+        </div>
+        
+        <div class="stat-card stat-card-4">
+            <div class="stat-icon">💼</div>
+            <div class="stat-number">{{ vendedores }}</div>
+            <div class="stat-label">Vendedores</div>
+        </div>
+    </div>
+
+    <div class="sales-info">
+        <div class="info-card info-card-sales">
+            <div class="card-header">
+                <h3>💰 Vendas Hoje</h3>
+            </div>
+            <p class="big-number">R$ {{ total_vendas_hoje }}</p>
+            <p class="info-text">{{ quantidade_vendas_hoje }} transação(ões)</p>
+        </div>
+
+        <div class="info-card info-card-products">
+            <div class="card-header">
+                <h3>⭐ Produtos Mais Vendidos</h3>
+            </div>
+            <ul class="product-list">
+                {% if produtos_vendidos %}
+                    {% for produto in produtos_vendidos %}
+                        <li class="product-item">
+                            <span class="product-name">{{ produto.nome }}</span>
+                            <span class="product-qty">{{ produto.total_qty }}x</span>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="product-item">Nenhuma venda registrada hoje</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{% url 'registrar_entrada' %}" class="btn btn-primary btn-lg btn-pulse">
+            ➕ Nova Venda
+        </a>
+    </div>
+</div>
+{% endblock %}
