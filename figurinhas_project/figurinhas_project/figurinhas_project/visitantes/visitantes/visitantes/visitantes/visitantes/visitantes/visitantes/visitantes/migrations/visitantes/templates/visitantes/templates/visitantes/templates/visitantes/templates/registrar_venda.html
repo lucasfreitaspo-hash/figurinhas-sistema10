@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Venda - Mister Wiz{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Nova Venda para {{ entrada.visitante.nome }}</h1>
+    
+    <div class="visitor-info">
+        <p><strong>Nome:</strong> {{ entrada.visitante.nome }}</p>
+        <p><strong>Telefone:</strong> {{ entrada.visitante.telefone }}</p>
+        <p><strong>Tipo:</strong> {{ entrada.visitante.get_tipo_display }}</p>
+    </div>
+
+    {% if erro %}
+        <div class="alert alert-danger">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST" class="form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="produto_id">Produto *</label>
+            <select id="produto_id" name="produto_id" required onchange="atualizarPreco()">
+                <option value="">Selecione um produto</option>
+                {% for produto in produtos %}
+                    <option value="{{ produto.id }}" data-preco="{{ produto.preco }}">
+                        {{ produto.nome }} - R$ {{ produto.preco|floatformat:2 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantidade">Quantidade *</label>
+            <input type="number" id="quantidade" name="quantidade" value="1" min="1" required onchange="atualizarPreco()">
+        </div>
+
+        <div class="price-display">
+            <h3>Preço Total</h3>
+            <p id="preco_total" class="big-number">R$ 0,00</p>
+        </div>
+
+        <div class="form-group">
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="observacoes" placeholder="Anotações sobre a venda..."></textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-success btn-lg">Confirmar Venda</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function atualizarPreco() {
+    const produtoSelect = document.getElementById('produto_id');
+    const quantidade = document.getElementById('quantidade').value;
+    const produtoId = produtoSelect.value;
+
+    if (!produtoId) {
+        document.getElementById('preco_total').textContent = 'R$ 0,00';
+        return;
+    }
+
+    fetch(`/api/calcular-preco/?produto_id=${produtoId}&quantidade=${quantidade}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                document.getElementById('preco_total').textContent = data.total_formatado;
+            }
+        });
+}
+
+document.addEventListener('DOMContentLoaded', atualizarPreco);
+document.getElementById('quantidade').addEventListener('input', atualizarPreco);
+document.getElementById('produto_id').addEventListener('change', atualizarPreco);
+</script>
+{% endblock %}
