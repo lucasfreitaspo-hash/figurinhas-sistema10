@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Contatos - Mister Wiz{% endblock %}
+
+{% block content %}
+<div class="contacts-container">
+    <h1>📇 Base de Contatos</h1>
+
+    <div class="filters">
+        <form method="GET" class="filter-form">
+            <input type="text" name="busca" placeholder="Buscar por nome ou telefone..." value="{{ busca }}">
+            
+            <select name="filtro">
+                <option value="todos" {% if filtro == 'todos' %}selected{% endif %}>Todos</option>
+                <option value="comprador" {% if filtro == 'comprador' %}selected{% endif %}>Compradores</option>
+                <option value="vendedor" {% if filtro == 'vendedor' %}selected{% endif %}>Vendedores</option>
+                <option value="outro" {% if filtro == 'outro' %}selected{% endif %}>Outros</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+    </div>
+
+    <div class="contacts-list">
+        {% if visitantes %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Visitas</th>
+                        <th>Gasto Total</th>
+                        <th>Cadastro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visitante in visitantes %}
+                        <tr>
+                            <td>{{ visitante.nome }}</td>
+                            <td>{{ visitante.telefone }}</td>
+                            <td>{{ visitante.email|default:"-" }}</td>
+                            <td><span class="badge badge-{{ visitante.tipo }}">{{ visitante.get_tipo_display }}</span></td>
+                            <td>{{ visitante.total_visitas }}</td>
+                            <td>R$ {{ visitante.total_gasto|default:0|floatformat:2 }}</td>
+                            <td>{{ visitante.data_cadastro|date:"d/m/Y" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-results">Nenhum contato encontrado.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
